@@ -11,12 +11,13 @@
 
 <script>
 // @ is an alias to /src
-import ShaynaHeader from "@/components/homepage/ShaynaHeader.vue";
 import ShaynaHero from "@/components/homepage/ShaynaHero.vue";
 import ShaynaBanner from "@/components/homepage/ShaynaBanner.vue";
 import ShaynaInsta from "@/components/homepage/ShaynaInsta.vue";
 import ShaynaPartnerLogo from "@/components/homepage/ShaynaPartnerLogo.vue";
-import ShaynaFooter from "@/components/homepage/ShaynaFooter.vue";
+
+import ShaynaHeader from "@/components/ShaynaHeader.vue";
+import ShaynaFooter from "@/components/ShaynaFooter.vue";
 
 export default {
   name: "Home",

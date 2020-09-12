@@ -74,4 +74,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+footer{
+  text-align: left;
+}
+</style>

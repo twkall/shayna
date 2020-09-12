@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="hero-section">
-      <carousel class="hero-items" :autoplay="true" :items="1" :nav="false" :dots="false">
+      <carousel class="hero-items" :autoplay="true" :items="1" :nav="false" :dots="false" :loop="true">
         <div
           class="single-hero-items set-bg"
           style="background-image: url('img/hero-1.jpg')"
