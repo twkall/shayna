@@ -24,7 +24,7 @@
                 <div class="product-pic-zoom">
                   <img class="product-big-img" :src="default_picture" alt="" />
                 </div>
-                <div class="product-thumbs">
+                <div class="product-thumbs" v-if="pictureLength > 0">
                   <carousel
                     class="product-thumbs-track ps-slider"
                     :margin="12"
@@ -32,13 +32,13 @@
                     :dots="false"
                   >
                     <div
-                      v-for="thumb in thumbs"
-                      :key="thumb"
+                      v-for="thumb in productDetails.galleries"
+                      :key="thumb.id"
                       class="pt"
-                      v-bind:class="{ active: default_picture == thumb }"
-                      @click="changeImage(thumb)"
+                      :class="default_picture == thumb.photo ? 'active' : ''"
+                      @click="changeImage(thumb.photo)"
                     >
-                      <img :src="thumb" alt="" />
+                      <img :src="thumb.photo" alt="" />
                     </div>
                   </carousel>
                 </div>
@@ -46,38 +46,35 @@
               <div class="col-lg-6">
                 <div class="product-details">
                   <div class="pd-title">
-                    <span>oranges</span>
-                    <h3>Pure Pineapple</h3>
+                    <span>{{ productDetails.type }}</span>
+                    <h3>{{ productDetails.product_name }}</h3>
                   </div>
                   <div class="pd-desc">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Corporis, error officia. Rem aperiam laborum voluptatum
-                      vel, pariatur modi hic provident eum iure natus quos non a
-                      sequi, id accusantium! Autem.
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Quam possimus quisquam animi, commodi, nihil voluptate
-                      nostrum neque architecto illo officiis doloremque et
-                      corrupti cupiditate voluptatibus error illum. Commodi
-                      expedita animi nulla aspernatur. Id asperiores blanditiis,
-                      omnis repudiandae iste inventore cum, quam sint molestiae
-                      accusamus voluptates ex tempora illum sit perspiciatis.
-                      Nostrum dolor tenetur amet, illo natus magni veniam quia
-                      sit nihil dolores. Commodi ratione distinctio harum
-                      voluptatum velit facilis voluptas animi non laudantium, id
-                      dolorem atque perferendis enim ducimus? A exercitationem
-                      recusandae aliquam quod. Itaque inventore obcaecati, unde
-                      quam impedit praesentium veritatis quis beatae ea atque
-                      perferendis voluptates velit architecto?
-                    </p>
-                    <h4>$495.00</h4>
+                    <p v-html="productDetails.description" />
+                    <h4>{{ productDetails.price }}</h4>
                   </div>
                   <div class="quantity">
-                    <router-link to="/cart" class="primary-btn pd-cart"
-                      >Add To Cart</router-link
-                    >
+                    <div class="col-6 pl-1">
+                      <a
+                        @click="
+                          saveKeranjang(
+                            productDetails.id,
+                            productDetails.product_name,
+                            productDetails.galleries[0].photo,
+                            productDetails.price
+                          )
+                        "
+                        href="#"
+                        class="primary-btn pd-cart"
+                        style="background: #252525"
+                        >Add To Cart</a
+                      >
+                    </div>
+                    <div class="col-6 pl-1">
+                      <router-link to="/cart" class="primary-btn pd-cart"
+                        >View Cart
+                      </router-link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -97,6 +94,8 @@ import ShaynaHeader from "@/components/ShaynaHeader.vue";
 import ShaynaFooter from "@/components/ShaynaFooter.vue";
 import RelatedProducts from "@/components/product/RelatedProducts.vue";
 
+import Axios from "axios";
+
 export default {
   name: "Product",
   components: {
@@ -107,20 +106,50 @@ export default {
   },
   data() {
     return {
-      default_picture: "img/mickey1.jpg",
-      isActive: true,
-      thumbs: [
-        "img/mickey1.jpg",
-        "img/mickey2.jpg",
-        "img/mickey3.jpg",
-        "img/mickey4.jpg",
-      ],
+      default_picture: "",
+      pictureLength: 0,
+      productDetails: [],
+      keranjangUser: [],
     };
   },
   methods: {
     changeImage(imageUrl) {
       this.default_picture = imageUrl;
     },
+    setDefaultPicture(data) {
+      this.productDetails = data;
+      this.default_picture = data.galleries[0].photo;
+      this.pictureLength = Object.keys(data.galleries).length;
+    },
+    saveKeranjang(productId, productName, productPhoto, productPrice) {
+      var productStored = {
+        id: productId,
+        product_name: productName,
+        photo: productPhoto,
+        price: productPrice,
+      };
+
+      this.keranjangUser.push(productStored);
+      const parsed = JSON.stringify(this.keranjangUser);
+      localStorage.setItem("keranjangUser", parsed);
+      window.location.reload();
+    },
+  },
+  mounted() {
+    if (localStorage.getItem("keranjangUser")) {
+      try {
+        this.keranjangUser = JSON.parse(localStorage.getItem("keranjangUser"));
+      } catch (e) {
+        localStorage.removeItem("keranjangUser");
+      }
+    }
+
+    Axios.get("http://localhost:8000/api/products", {
+      params: { id: this.$route.params.id },
+    })
+      .then((res) => this.setDefaultPicture(res.data.data))
+      // eslint-disable-next-line no-console
+      .catch((err) => console.log(err));
   },
 };
 </script>

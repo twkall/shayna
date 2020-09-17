@@ -10,7 +10,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import ShaynaHero from "@/components/homepage/ShaynaHero.vue";
 import ShaynaBanner from "@/components/homepage/ShaynaBanner.vue";
 import ShaynaInsta from "@/components/homepage/ShaynaInsta.vue";

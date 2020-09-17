@@ -11,7 +11,9 @@
         Silakan tunggu update terbaru dari kami via email yang sudah Anda
         daftarkan sebelumnya.
       </p>
-      <router-link to="/" class="primary-btn pd-cart mt-3">Back to Home</router-link>
+      <router-link to="/" class="primary-btn pd-cart mt-3"
+        >Back to Home</router-link
+      >
     </div>
   </div>
 </template>
@@ -19,6 +21,16 @@
 <script>
 export default {
   name: "SuccessPage",
+  data() {
+    return {
+      keranjangUser: [],
+    };
+  },
+  mounted() {
+    if (localStorage.getItem("keranjangUser")) {
+      localStorage.removeItem("keranjangUser");
+    }
+  },
 };
 </script>
 
