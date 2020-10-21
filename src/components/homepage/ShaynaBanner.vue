@@ -93,7 +93,7 @@ export default {
       }
     }
 
-    Axios.get("http://localhost:8000/api/products")
+    Axios.get("http://shayna-lara.herokuapp.com/api/products")
       .then((res) => (this.products = res.data.data.data))
       // eslint-disable-next-line no-console
       .catch((err) => console.log(err));

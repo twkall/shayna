@@ -213,7 +213,7 @@ export default {
         transaction_details: productIds,
       };
 
-      Axios.post("http://localhost:8000/api/checkout", checkoutData)
+      Axios.post("http://shayna-lara.herokuapp.com/api/checkout", checkoutData)
         .then(() => this.$router.push("success"))
         // eslint-disable-next-line no-console
         .catch((err) => console.log(err));

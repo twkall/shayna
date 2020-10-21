@@ -144,7 +144,7 @@ export default {
       }
     }
 
-    Axios.get("http://localhost:8000/api/products", {
+    Axios.get("http://shayna-lara.herokuapp.com/api/products", {
       params: { id: this.$route.params.id },
     })
       .then((res) => this.setDefaultPicture(res.data.data))
